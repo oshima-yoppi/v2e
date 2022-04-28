@@ -12,3 +12,6 @@ python v2e.py -i C:\Users\oosim\Desktop\avi\0.avi  --output_folder=output/tennis
 
 python v2e.py -i C:\Users\oosim\Desktop\avi\0.avi  --output_folder=output/tennis --dvs_text DVS_TEXT --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False  --output_folder=output/tennis --overwrite --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --dvs_aedat2 tennis.aedat --output_width=180 --output_height=180  --cutoff_hz=15 --disable_slomo --timestamp_resolution=0.01 --input_slowmotion_factor 1 --dvs_h5 dvs_h5
 
+プレビューなし
+python v2e.py -i C:/Users/oosim/Desktop/avi/0.avi  --output_folder=output/ --dvs_text DVS_TEXT --dvs_h5 dvs --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview
+
