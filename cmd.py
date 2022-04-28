@@ -1,6 +1,13 @@
 import os 
+import glob
 from tqdm import tqdm
-for i in tqdm(range(2)):
-    string = "python v2e.py -i C:/Users/oosim/Desktop/avi/{}.avi  --output_folder=output/ --dvs_text DVS_TEXT{} --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --dvs_h5 dvs{}".format(str(i), str(i),str(i))
-    # string = "python {}.py".format("a")
+dir = 'C:/Users/oosim/Desktop/avi/'
+avi_data = []
+for _, _, files in os.walk(dir):
+    for file in files:
+        avi_data.append(os.path.join(dir, file))
+    
+for i, data in enumerate(tqdm(avi_data)):
+    string = "python v2e.py -i {}  --output_folder=output/ --dvs_text DVS_TEXT{} --dvs_h5 dvs{} --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview".format(data, str(i),str(i))
     _ = os.system(string)
+
