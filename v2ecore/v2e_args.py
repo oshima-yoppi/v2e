@@ -1,4 +1,5 @@
 import argparse
+from email.policy import default
 import os
 import logging
 from pathlib import Path
@@ -71,6 +72,7 @@ def v2e_args(parser):
         "--avi_frame_rate", type=int, default=30,
         help="frame rate of output AVI video files; "
              "only affects playback rate. ")
+
 
     outGroupGeneral.add_argument(
         "--output_in_place", default=True, type=str2bool,
@@ -351,6 +353,10 @@ def v2e_args(parser):
         "--davis_output", action="store_true",
         help="Save frames, frame timestamp and corresponding event index"
              "in HDF5. Default is False.")
+    dvsEventOutputGroup.add_argument(
+        "--label",  default=None,
+        help="omega lable"
+    )       
     dvsEventOutputGroup.add_argument(
         "--dvs_h5", type=output_file_check, default=None,
         help="Output DVS events as hdf5 event database. ")
