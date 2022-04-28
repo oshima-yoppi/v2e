@@ -467,6 +467,7 @@ def main():
         refractory_period_s=args.refractory_period,
         seed=args.dvs_emulator_seed,
         output_folder=output_folder, dvs_h5=dvs_h5, dvs_aedat2=dvs_aedat2,
+        truth=omega_truth,
         dvs_text=dvs_text, show_dvs_model_state=args.show_dvs_model_state,
         output_width=output_width, output_height=output_height,
         device=torch_device)

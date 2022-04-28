@@ -5,6 +5,7 @@ filename = 'output/dvs.h5'
 with h5py.File(filename, "r") as f:
     print(f.keys())
     print(f["events"][()])
+    print(f['truth'][()])
     x = f["events"][()]
 with open('test.txt', 'w') as f:
     for i in x:

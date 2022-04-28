@@ -52,6 +52,7 @@ class EventEmulator(object):
             dvs_h5: str = None,
             dvs_aedat2: str = None,
             dvs_text: str = None,
+            truth: list = [0,0,0],
             # change as you like to see 'baseLogFrame',
             # 'lpLogFrame', 'diff_frame'
             show_dvs_model_state: str = None,
@@ -142,6 +143,8 @@ class EventEmulator(object):
         # aedat or text output
         self.dvs_aedat2 = dvs_aedat2
         self.dvs_text = dvs_text
+        #正解データ
+        self.truth = truth
 
         # event stats
         self.num_events_total = 0
@@ -155,7 +158,9 @@ class EventEmulator(object):
                 path = checkAddSuffix(path, '.h5')
                 logger.info('opening event output dataset file ' + path)
                 self.dvs_h5 = h5py.File(path, "w")
-
+                self.dvs_h5.create_dataset('truth', data = self.truth)
+                # with h5py.File(path, "w") as f_:
+                #     f_.create_dataset('truth', data = self.truth)
                 # for events
                 self.dvs_h5_dataset = self.dvs_h5.create_dataset(
                     name="events",
