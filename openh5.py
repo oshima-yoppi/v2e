@@ -1,6 +1,6 @@
 import numpy as np
 import h5py
-filename = 'output/tennis/dvs_h5.h5'
+filename = 'output/dvs.h5'
 
 with h5py.File(filename, "r") as f:
     print(f.keys())
