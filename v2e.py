@@ -55,7 +55,7 @@ logger = logging.getLogger(__name__)
 
 # torch device
 torch_device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+print(torch_device)
 # may only apply to windows
 try:
     #  from scripts.regsetup import description
@@ -85,11 +85,12 @@ def get_args():
     # eval "$(register-python-argcomplete v2e.py)"
     argcomplete.autocomplete(parser)
 
-    (args_namespace,other_args) = parser.parse_known_args() # change to known arguments so that synthetic input module can take arguments
-    command_line=''
+    # change to known arguments so that synthetic input module can take arguments
+    (args_namespace, other_args) = parser.parse_known_args()
+    command_line = ''
     for a in sys.argv:
-        command_line=command_line+' '+a
-    return (args_namespace,other_args,command_line)
+        command_line = command_line+' '+a
+    return (args_namespace, other_args, command_line)
 
 
 def main():
@@ -104,7 +105,7 @@ def main():
             f'{e}: Gooey package GUI not available, using command line arguments. \n'
             f'You can try to install with "pip install Gooey"')
 
-    (args,other_args,command_line) = get_args()
+    (args, other_args, command_line) = get_args()
 
     # set input file
     input_file = args.input
@@ -126,16 +127,16 @@ def main():
         try:
             synthetic_input_module = importlib.import_module(synthetic_input)
             if '.' in synthetic_input:
-                classname=synthetic_input[synthetic_input.rindex('.')+1:]
+                classname = synthetic_input[synthetic_input.rindex('.')+1:]
             else:
-                classname=synthetic_input
-            synthetic_input_class:synthetic_input = getattr(
+                classname = synthetic_input
+            synthetic_input_class: synthetic_input = getattr(
                 synthetic_input_module, classname)
-            synthetic_input_instance:base_synthetic_input = synthetic_input_class(
+            synthetic_input_instance: base_synthetic_input = synthetic_input_class(
                 width=output_width, height=output_height,
                 preview=not args.no_preview, arg_list=other_args)
 
-            if not isinstance(synthetic_input_instance,base_synthetic_input):
+            if not isinstance(synthetic_input_instance, base_synthetic_input):
                 logger.error(f'synthetic input instance of {synthetic_input} is of type {type(synthetic_input_instance)}, but it should be a sublass of synthetic_input;'
                              f'there is no guarentee that it implements the necessary methods')
             synthetic_input_next_frame_method = getattr(
@@ -143,8 +144,7 @@ def main():
             synthetic_input_total_frames_method = getattr(
                 synthetic_input_class, 'total_frames')
 
-
-            srcNumFramesToBeProccessed=synthetic_input_instance.total_frames()
+            srcNumFramesToBeProccessed = synthetic_input_instance.total_frames()
 
             logger.info(
                 f'successfully instanced {synthetic_input_instance} with'
@@ -158,7 +158,6 @@ def main():
             logger.error(f'{synthetic_input} method incorrect?: {e}')
             v2e_quit(1)
 
-
     if synthetic_input is None and not input_file:
         try:
             input_file = inputVideoFileDialog()
@@ -166,9 +165,9 @@ def main():
                 logger.info('no file selected, quitting')
                 v2e_quit()
         except Exception as e:
-            logger.error(f'no input file specified and cannot show input file dialog; are you running without graphical display? ({e})')
+            logger.error(
+                f'no input file specified and cannot show input file dialog; are you running without graphical display? ({e})')
             v2e_quit(1)
-
 
     # Set output folder
     output_folder = set_output_folder(
@@ -192,11 +191,9 @@ def main():
 
     logger.info(f'Command line: \n{command_line}')
 
-
-
     num_frames = 0
     srcNumFramesToBeProccessed = 0
-    srcDurationToBeProcessed=float("NaN")
+    srcDurationToBeProcessed = float("NaN")
 
    # input file checking
     #  if (not input_file or not os.path.isfile(input_file)
@@ -207,12 +204,9 @@ def main():
             logger.error('input file {} does not exist'.format(input_file))
             v2e_quit(1)
         if os.path.isdir(input_file):
-            if len(os.listdir(input_file))==0:
+            if len(os.listdir(input_file)) == 0:
                 logger.error(f'input folder {input_file} is empty')
                 v2e_quit(1)
-
-
-
 
     # define video parameters
     # the input start and stop time, may be round to actual
@@ -280,7 +274,6 @@ def main():
     if exposure_mode == ExposureMode.DURATION:
         dvsFps = 1. / exposure_val
 
-
     time_run_started = time.time()
 
     slomoTimestampResolutionS = None
@@ -299,16 +292,19 @@ def main():
             srcFps = cap.frame_rate
             srcNumFrames = cap.num_frames
             # set the output width and height from first image in folder, but only if they were not already set
-            if output_height is None: output_height=cap.frame_height
-            if output_height is None: output_width=cap.frame_width
+            if output_height is None:
+                output_height = cap.frame_height
+            if output_height is None:
+                output_width = cap.frame_width
 
         else:
             cap = cv2.VideoCapture(input_file)
             srcFps = cap.get(cv2.CAP_PROP_FPS)
             srcNumFrames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
             if args.input_frame_rate is not None:
-                logger.info(f'Input video frame rate {srcFps}Hz is overridden by command line argument --input_frame_rate={args.input_frame_rate}')
-                srcFps=args.input_frame_rate
+                logger.info(
+                    f'Input video frame rate {srcFps}Hz is overridden by command line argument --input_frame_rate={args.input_frame_rate}')
+                srcFps = args.input_frame_rate
         # Check frame rate and number of frames
         if srcFps == 0:
             logger.error(
@@ -444,7 +440,8 @@ def main():
             dvsDuration = dvsNumFrames/dvsFps
             dvsPlaybackDuration = dvsNumFrames/avi_frame_rate
             start_time = start_frame/srcFps
-            stop_time = stop_frame/srcFps  # todo something replicated here, already have start and stop times
+            # todo something replicated here, already have start and stop times
+            stop_time = stop_frame/srcFps
 
             logger.info('v2e DVS video will have constant-duration frames \n'
                         'at {}fps (accumulation time {}s), '
@@ -491,7 +488,7 @@ def main():
         # array to batch events for rendering to DVS frames
         events = np.zeros((0, 4), dtype=np.float32)
         (fr, fr_time) = synthetic_input_instance.next_frame()
-        num_frames+=1
+        num_frames += 1
         i = 0
         with tqdm(total=synthetic_input_instance.total_frames(),
                   desc='dvs', unit='fr') as pbar:
@@ -510,7 +507,7 @@ def main():
                                 width=output_width)
                             events = np.zeros((0, 4), dtype=np.float32)
                     (fr, fr_time) = synthetic_input_instance.next_frame()
-                    num_frames+=1
+                    num_frames += 1
             # process leftover events
             if len(events) > 0 and not args.skip_video_output:
                 eventRenderer.render_events_to_frames(
@@ -527,9 +524,9 @@ def main():
         if start_frame > 0:
             logger.info('skipping to frame {}'.format(start_frame))
             for i in tqdm(range(start_frame), unit='fr', desc='src'):
-                if isinstance(cap,ImageFolderReader):
-                    if i<start_frame-1:
-                        ret,_=cap.read(skip=True)
+                if isinstance(cap, ImageFolderReader):
+                    if i < start_frame-1:
+                        ret, _ = cap.read(skip=True)
                     else:
                         ret, _ = cap.read()
                 else:
@@ -543,21 +540,23 @@ def main():
             'processing frames {} to {} from video input'.format(
                 start_frame, stop_frame))
 
-        c_l=0
-        c_r=None
-        c_t=0
-        c_b=None
+        c_l = 0
+        c_r = None
+        c_t = 0
+        c_b = None
         if args.crop is not None:
-            c=args.crop
-            if len(c)!=4:
-                logger.error(f'--crop must have 4 elements (you specified --crop={args.crop}')
+            c = args.crop
+            if len(c) != 4:
+                logger.error(
+                    f'--crop must have 4 elements (you specified --crop={args.crop}')
                 v2e_quit(1)
 
-            c_l=c[0] if c[0] > 0 else 0
-            c_r=-c[1] if c[1]>0 else None
-            c_t=c[2] if c[2]>0 else 0
-            c_b=-c[3] if c[3]>0 else None
-            logger.info(f'cropping video by (left,right,top,bottom)=({c_l},{c_r},{c_t},{c_b})')
+            c_l = c[0] if c[0] > 0 else 0
+            c_r = -c[1] if c[1] > 0 else None
+            c_t = c[2] if c[2] > 0 else 0
+            c_b = -c[3] if c[3] > 0 else None
+            logger.info(
+                f'cropping video by (left,right,top,bottom)=({c_l},{c_r},{c_t},{c_b})')
 
         with TemporaryDirectory() as source_frames_dir:
             if os.path.isdir(input_file):  # folder input
@@ -598,26 +597,31 @@ def main():
                     desc='rgb2luma', unit='fr'):
                 # read frame
                 ret, inputVideoFrame = cap.read()
-                num_frames+=1
-                if ret==False:
-                    logger.warning(f'could not read frame {inputFrameIndex} from {cap}')
+                num_frames += 1
+                if ret == False:
+                    logger.warning(
+                        f'could not read frame {inputFrameIndex} from {cap}')
                     continue
                 if inputVideoFrame is None or np.shape(inputVideoFrame) == ():
-                    logger.warning(f'empty video frame number {inputFrameIndex} in {cap}')
+                    logger.warning(
+                        f'empty video frame number {inputFrameIndex} in {cap}')
                     continue
                 if not ret or inputFrameIndex + start_frame > stop_frame:
                     break
 
                 if args.crop is not None:
                     # crop the frame, indices are y,x, UL is 0,0
-                    if c_l+(c_r if c_r is not None else 0)>=inputWidth:
-                        logger.error(f'left {c_l}+ right crop {c_r} is larger than image width {inputWidth}')
+                    if c_l+(c_r if c_r is not None else 0) >= inputWidth:
+                        logger.error(
+                            f'left {c_l}+ right crop {c_r} is larger than image width {inputWidth}')
                         v2e_quit(1)
-                    if c_t+(c_b if c_b is not None else 0)>=inputHeight:
-                        logger.error(f'top {c_t}+ bottom crop {c_b} is larger than image height {inputHeight}')
+                    if c_t+(c_b if c_b is not None else 0) >= inputHeight:
+                        logger.error(
+                            f'top {c_t}+ bottom crop {c_b} is larger than image height {inputHeight}')
                         v2e_quit(1)
 
-                    inputVideoFrame= inputVideoFrame[c_t:c_b, c_l:c_r] # https://stackoverflow.com/questions/15589517/how-to-crop-an-image-in-opencv-using-python
+                    # https://stackoverflow.com/questions/15589517/how-to-crop-an-image-in-opencv-using-python
+                    inputVideoFrame = inputVideoFrame[c_t:c_b, c_l:c_r]
 
                 if output_height and output_width and \
                         (inputHeight != output_height or
@@ -732,11 +736,21 @@ def main():
                     emulator.prepare_storage(nFrames, interpTimes)
                 with tqdm(total=nFrames, desc='dvs', unit='fr') as pbar:
                     with torch.no_grad():
+                        
                         for i in range(nFrames):
                             fr = read_image(interpFramesFilenames[i])
                             newEvents = emulator.generate_events(
-                                fr, interpTimes[i])
-
+                                fr, interpTimes[i], num = i)
+                            # print(interpTimes[i])
+                            # print("-----------------")
+                            try:
+                                
+                                # print("????????")
+                                # print(newEvents[0])
+                                pass
+                            except:
+                                pass
+                            # print(newEvents)
                             pbar.update(1)
                             if newEvents is not None and \
                                     newEvents.shape[0] > 0 \
@@ -764,13 +778,14 @@ def main():
 
     totalTime = (time.time()-time_run_started)
     framePerS = num_frames / totalTime
-    sPerFrame = totalTime / num_frames if num_frames>0 else None
+    sPerFrame = totalTime / num_frames if num_frames > 0 else None
     throughputStr = (str(eng(framePerS)) + 'fr/s') \
         if framePerS > 1 else (str(eng(sPerFrame)) + 's/fr')
-    timestr ='done processing {} frames in {}s ({})\n **************** see output folder {}'.format(num_frames,
-            eng(totalTime),
-            throughputStr,
-            output_folder)
+    timestr = 'done processing {} frames in {}s ({})\n **************** see output folder {}'.format(num_frames,
+                                                                                                     eng(
+                                                                                                         totalTime),
+                                                                                                     throughputStr,
+                                                                                                     output_folder)
     logger.info('generated total {} events ({} on, {} off)'
                 .format(eng(emulator.num_events_total),
                         eng(emulator.num_events_on),
@@ -781,7 +796,7 @@ def main():
             eng(emulator.num_events_total / emulator.t_previous),
             eng(emulator.num_events_on / emulator.t_previous),
             eng(emulator.num_events_off / emulator.t_previous)))
-    if totalTime>60:
+    if totalTime > 60:
         try:
             from plyer import notification
             logger.info(f'generating desktop notification')
@@ -800,6 +815,7 @@ def main():
                 '{}: could not open {} in desktop'.format(e, output_folder))
     logger.info(timestr)
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

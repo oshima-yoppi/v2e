@@ -355,7 +355,7 @@ class EventEmulator(object):
         cv2.imshow(__name__+':'+self.show_input, img)
         cv2.waitKey(30)
 
-    def generate_events(self, new_frame, t_frame):
+    def generate_events(self, new_frame, t_frame, num = 0 ):
         """Compute events in new frame.
 
         Parameters
@@ -584,6 +584,7 @@ class EventEmulator(object):
                     (num_events, 4), dtype=torch.float32,
                     device=self.device)
                 events_curr_iter[:, 0] *= ts[i]
+                # events_curr_iter[:, 0] *= i
 
                 # pos_event cords
                 events_curr_iter[:num_pos_events, 1] = pos_event_xy[1]
@@ -595,12 +596,14 @@ class EventEmulator(object):
 
                 # neg events polarity
                 events_curr_iter[num_pos_events:, 3] *= -1
-
+           
             # shuffle and append to the events collectors
             if events_curr_iter is not None:
                 idx = torch.randperm(events_curr_iter.shape[0])
                 events_curr_iter = events_curr_iter[idx].view(
                     events_curr_iter.size())
+                #タイムステップ用
+                # events_curr_iter[:, 0] =num
                 events.append(events_curr_iter)
 
         # update base log frame according to the final
@@ -610,10 +613,13 @@ class EventEmulator(object):
 
         if len(events) > 0:
             events = torch.vstack(events).cpu().data.numpy()
+            
             if self.dvs_h5 is not None:
                 # convert data to uint32 (microsecs) format
                 temp_events = np.array(events, dtype=np.float32)
-                temp_events[:, 0] = temp_events[:, 0] * 1e6
+                # temp_events[:, 0] = temp_events[:, 0] * 1e6
+                temp_events[:, 0] = int(num)
+                print(num)
                 temp_events[temp_events[:, 3] == -1, 3] = 0
                 temp_events = temp_events.astype(np.uint32)
 
@@ -623,7 +629,8 @@ class EventEmulator(object):
                    axis=0)
 
                 self.dvs_h5_dataset[-temp_events.shape[0]:] = temp_events
-
+            #タイムステップ用
+            # events[:,0] = num
             if self.dvs_aedat2 is not None:
                 self.dvs_aedat2.appendEvents(events)
             if self.dvs_text is not None:
@@ -638,6 +645,8 @@ class EventEmulator(object):
         # assign new time
         self.t_previous = t_frame
         if len(events) > 0:
+            
+            # print(events)
             return events
         else:
             return None
