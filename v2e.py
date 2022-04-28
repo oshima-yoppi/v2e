@@ -262,6 +262,8 @@ def main():
     dvs_h5 = args.dvs_h5
     dvs_aedat2 = args.dvs_aedat2
     dvs_text = args.dvs_text
+    #角速度ωの正解データ
+    omega_truth = args.truth
 
     # Debug feature: if show slomo stats
     slomo_stats_plot = args.slomo_stats_plot
@@ -743,13 +745,13 @@ def main():
                                 fr, interpTimes[i], num = i)
                             # print(interpTimes[i])
                             # print("-----------------")
-                            try:
+                            # try:
                                 
-                                # print("????????")
-                                # print(newEvents[0])
-                                pass
-                            except:
-                                pass
+                            #     # print("????????")
+                            #     # print(newEvents[0])
+                            #     pass
+                            # except:
+                            #     pass
                             # print(newEvents)
                             pbar.update(1)
                             if newEvents is not None and \
