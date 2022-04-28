@@ -619,7 +619,6 @@ class EventEmulator(object):
                 temp_events = np.array(events, dtype=np.float32)
                 # temp_events[:, 0] = temp_events[:, 0] * 1e6
                 temp_events[:, 0] = int(num)
-                print(num)
                 temp_events[temp_events[:, 3] == -1, 3] = 0
                 temp_events = temp_events.astype(np.uint32)
 
