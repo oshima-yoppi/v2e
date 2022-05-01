@@ -353,8 +353,12 @@ def v2e_args(parser):
         "--davis_output", action="store_true",
         help="Save frames, frame timestamp and corresponding event index"
              "in HDF5. Default is False.")
+    # dvsEventOutputGroup.add_argument(
+    #     "--truth",  default=None,
+    #     help="omega lable"
+    # )       
     dvsEventOutputGroup.add_argument(
-        "--truth",  default=None,
+        "--label",  default=[0,0,0],
         help="omega lable"
     )       
     dvsEventOutputGroup.add_argument(
