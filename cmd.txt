@@ -15,6 +15,12 @@ python v2e.py -i C:\Users\oosim\Desktop\avi\0.avi  --output_folder=output/tennis
 プレビューなし
 python v2e.py -i C:/Users/oosim/Desktop/avi/0.avi  --output_folder=output/ --dvs_text DVS_TEXT --dvs_h5 dvs --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview
 
-C:/Users/oosim/Desktop/avi/1_1.97312797962095_0_0_.avi
+C:/Users/oosim/Desktop/avi/1_-8.968415904378503_0_0_.avi
 正解データ追加
-python v2e.py -i C:/Users/oosim/Desktop/avi/1_1.97312797962095_0_0_.avi --output_folder=output/ --dvs_text DVS_TEXT --dvs_h5 dvs --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview --truth [20,0,0]
+python v2e.py -i C:/Users/oosim/Desktop/avi/1_-8.968415904378503_0_0_.avi --output_folder=output/ --dvs_text DVS_TEXT --dvs_h5 dvs --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview --label [20,0,0]
+
+
+dvs text 無し
+python v2e.py -i C:/Users/oosim/Desktop/avi/1_-8.968415904378503_0_0_.avi --output_folder=output/  --dvs_h5 dvs --dvs_exposure duration 0.01 --overwrite --timestamp_resolution=0.01 --auto_timestamp_resolution=False --pos_thres=.15 --neg_thres=.15 --sigma_thres=0.03 --output_width=240 --output_height=180  --cutoff_hz=15 --disable_slomo --input_slowmotion_factor 1 --no_preview --label [20,0,0]
+
+
