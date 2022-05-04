@@ -4,7 +4,7 @@ import numpy as np
 import h5py
 import torch
 import re
-filename = 'output/dvs.h5'
+filename = 'output/dvs1.h5'
 
 with h5py.File(filename, "r") as f:
     print(f.keys())
@@ -12,13 +12,6 @@ with h5py.File(filename, "r") as f:
     l = f['label'][()]
     print(l)
     x = f["events"][()]
-    # lable = f['truth'][()]
-    # print(lable)
-    # lable = lable[1:-1]
-    # lable = lable.split(',')
-    # lablex = float(lable[0])
-    # labley = float(lable[1])
-    # lablez = float(lable[2])
 
 
 # events = torch.zeros(100, 2, 240 , 180)
