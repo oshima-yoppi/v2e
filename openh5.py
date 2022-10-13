@@ -4,7 +4,7 @@ import numpy as np
 import h5py
 import torch
 import re
-filename = 'output/dvs1.h5'
+filename = 'output_vector/dvs00001.h5'
 
 with h5py.File(filename, "r") as f:
     print(f.keys())
