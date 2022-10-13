@@ -1,3 +1,36 @@
+# V2eの使い方
+詳しいことに関しては、下に記載されている英文を読んでください。  
+v2e(Video To Event)は動画からイベントカメラの出力に変換するシミュレータです。  
+## 環境作成
+使用するライブラリは`env/environment.yml`にまとめてあります。次のコマンドで環境作成できます。
+```bash
+conda create -n v2e -f env/environment.yml
+```
+もしわからない場合は![このサイト](https://qiita.com/nshinya/items/cb1cffabc3305c907bc5)を参考にしてください。
+
+## 使い方
+![v2e](https://github.com/oshima-yoppi/v2e)の使い方を軽く説明します。  
+v2eはかなり多くのargumentがありますが、![v2e](https://github.com/oshima-yoppi/v2e)の`README.md`に詳しく説明されてあります。そこの英語を読んでがんばってください＾＾  
+`cmd.py`を実行することによって、学習用の入力データと正解データを作成して保存します。  
+入力データはblenderで作成した動画です。出力データがそれらの動画をイベントカメラバージョンに変換させたときのデータになります。(t, p, x, y)のデータ型で保存される。（時間、極性、ｘ座標、ｙ座標）  
+正解データはblenderで作成した動画のファイル名から読み込んでいます。
+出力データと正解データはtorch.tensor型で`output_vector`フォルダ内に`.h5`ファイルに保存されます。  
+v2eにより次のように動画をイベントデータに変換できます。  左から順に、Blenderで作成したデブリ回転動画、V2Eによりイベントカメラの出力に変換した動画、イベント出力を赤色と緑色で表した動画(![このファイル](https://github.com/oshima-yoppi/Regression-with-Spiking-Neural-Networks/blob/main/youtube.py)で作成できます)
+![11_-82 15004684584068_0_0_](https://user-images.githubusercontent.com/82073759/171681741-ba964a32-5cfd-43fe-bb4c-d69e6c965247.gif)
+![dvs-video (1)](https://user-images.githubusercontent.com/82073759/171682207-dc1ed076-8993-4d68-8a97-b6469c0b08bd.gif)
+![RGB](https://github.com/oshima-yoppi/SNU_torch/blob/bf0eeb282c6cc7c25fda309d9154aa09b9ee3c4b/youtube/douga_.gif)
+
+## ファイル説明
+### cmd.py
+このファイルでは学習用データを作ります。`cmd.py`の中の`string`という変数でコマンドを作成しています。そこには多数の引数(argument)があると思いまが、下に記載されている英語の説明を見ればわかると思います。重要な引数の説明を下に簡単に記載します。   
+- `--i` ：入力データのパス
+- `--output_folder`：出力させるフォルダを指定
+- `--dvs_h5`：出力させるファイル名を指定
+- `--label`：教師データのリストを指定
+- `--output_width`, `--output_height`：動画の縦横の幅を指定
+
+
+
 # v2e [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1czx-GJnx-UkhFVBbfoACLVZs8cYlcr_M?usp=sharing)
 
 Python torch + opencv code to go from conventional stroboscopic video frames with low frame rate into realistic synthetic DVS event streams with much higher effective timing precision. v2e includes finite intensity-depenedent photoreceptor bandwidth, Gaussian pixel to pixel event threshold variation, and noise 'leak' events.
